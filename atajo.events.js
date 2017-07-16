@@ -7,11 +7,14 @@ class Events {
     constructor() {
 
         this.cache = {};
-        this.cachePath = path.join(__dirname, 'cache', 'tx');
+        this.cachePath = path.join(__dirname, 'cache');
+        this.cacheTXPath = path.join(this.cachePath, 'tx');
 
         fs.exists(this.cachePath, (exists) => {
-            if (!exists) fs.mkdirSync(this.cachePath);
-
+            if (!exists) {
+                fs.mkdirSync(this.cachePath);
+                fs.mkdirSync(this.cacheTXPath);
+            }
         });
     }
 
@@ -90,7 +93,7 @@ class Events {
             }
 
             //GET THE FIRST CHUNK'S DATA
-            let firstChunk = path.join(this.cachePath, tx.pid + '.0.chunk');
+            let firstChunk = path.join(this.cacheTXPath, tx.pid + '.0.chunk');
 
             fs.readFile(firstChunk, 'utf8', (err, data) => {
 
