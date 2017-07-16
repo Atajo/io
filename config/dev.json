@@ -1,0 +1,40 @@
+{
+    "CONSUL": {
+
+        "api": {
+
+            "host": "consul.atajo.co.za",
+            "port": 443,
+            "secure": true,
+            "promisify": true
+
+        },
+        "map": {
+            "key": "map",
+            "token": "cc110285-09b9-7767-dc1c-ab04fb24c784"
+        },
+        "checkInterval": 10000,
+        "fetch": {}
+
+    },
+
+    "SOCKET": {
+        "OPTIONS": {
+            "reconnection": true,
+            "reconnectionAttempts": 50,
+            "reconnectionDelay": 1000,
+            "reconnectionDelayMax": 10000,
+            "randomizationFactor": 0.5,
+            "timeout": 10000,
+            "autoConnect": true
+        }
+    },
+
+    "MONGO": {
+
+
+
+    }
+
+
+}
