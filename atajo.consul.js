@@ -89,6 +89,12 @@ class Consul {
                     break;
                 }
             }
+
+            if (that.fetch.length == 0) {
+                log.error("DOMAIN " + domain + " NOT FOUND");
+                process.exit(1);
+            }
+
             that.process();
 
 

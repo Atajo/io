@@ -30,7 +30,8 @@ class IO {
 
 
                 that.identity = JSON.parse(response.value);
-                // log.debug("IO:IDENTITY UPDATE : ", that.identity);
+                log.debug("IO:IDENTITY UPDATE : ", that.identity);
+
                 if (!this.started) {
                     this.started = true;
                     this.connect(domain, secret);
@@ -83,6 +84,4 @@ class IO {
 
 }
 
-
-//let provider = new IO('dev', 'werner', '8accef87de95ec5f3c0a115b2cbf12ab');
-let provider = new IO('dev', 'welcome', '08a032e7f9d473ed2fd27405f10334c3');
+module.exports = IO;

@@ -23,6 +23,11 @@ class Events {
 
         this.socket = socket;
 
+        socket.on('disconnect', data => {
+            log.debug('CORE DISCONNECT - PLEASE MAKE SURE THE SUPPLIED SECRET KEY IS VALID');
+            process.exit(1);
+        });
+
         socket.on('client:connect', data => {
             log.debug('client:connect', data);
         });
@@ -142,51 +147,58 @@ class Events {
     spawnHandler(name, rx) {
 
 
-        let lambdaFile = path.join('../', 'lambdas', name + '.js');
-        if (!lambdaFile) {
-            log.error("LAMBDA FOR " + name + " (lambdas/" + name + ".js) NOT FOUND");
-            return;
-        }
+        let lambdaFile = path.join(__dirname, '../', 'lambdas', name + '.js');
+        fs.exists(lambdaFile, (exists) => {
 
-        try {
+            if (!exists) {
+                log.error("LAMBDA FOR " + name + " (lambdas/" + name + ".js) NOT FOUND");
+                return;
+            }
 
-            log.debug("FORKING PROCESS FOR " + name + "@" + lambdaFile);
+            try {
 
-            let fork = require('child_process').fork;
-            this.cache[name] = fork(lambdaFile);
+                log.debug("FORKING PROCESS FOR " + name + "@" + lambdaFile);
 
-            this.cache[name].send({
-                action: 'configure',
-                release: release,
-                domain: domain
+                let fork = require('child_process').fork;
+                this.cache[name] = fork(lambdaFile);
 
-            });
+                this.cache[name].send({
+                    action: 'configure',
+                    release: release,
+                    domain: domain
 
-            this.cache[name].send({
-                action: 'rx',
-                request: rx
-            });
+                });
 
-            //GET RESPONSE FORM PROCESS
-            this.cache[name].on('message', msg => {
+                this.cache[name].send({
+                    action: 'rx',
+                    request: rx
+                });
 
-                log.debug("GOT RESPONSE FROM HANDLER ", msg);
+                //GET RESPONSE FORM PROCESS
+                this.cache[name].on('message', msg => {
 
-                this.providerTx(msg);
-                //CREATE THE PAYLOAD
+                    log.debug("GOT RESPONSE FROM HANDLER ", msg);
 
-
-
-
-            });
+                    this.providerTx(msg);
+                    //CREATE THE PAYLOAD
 
 
 
-        } catch (e) {
 
-            log.error("COULD NOT SPAWN HANDLER", e.stack);
+                });
 
-        }
+
+
+            } catch (e) {
+
+                log.error("COULD NOT SPAWN HANDLER", e.stack);
+
+            }
+
+
+
+        })
+
 
 
 
