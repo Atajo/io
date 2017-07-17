@@ -30,7 +30,7 @@ class IO {
 
 
                 that.identity = JSON.parse(response.value);
-                log.debug("IO:IDENTITY UPDATE : ", that.identity);
+                //log.debug("IO:IDENTITY UPDATE : ", that.identity);
 
                 if (!this.started) {
                     this.started = true;
