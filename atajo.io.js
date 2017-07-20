@@ -40,9 +40,7 @@ class IO {
 
             },
             error => {
-
-                log.error("FIREWALL UPDATE ERROR : ", error);
-
+                log.error("CONSUL UPDATE ERROR : ", error);
             },
             () => {}
         );
