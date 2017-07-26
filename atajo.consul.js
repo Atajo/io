@@ -56,9 +56,12 @@ class Consul {
 
             let parameters = this.fetch[i];
 
+
+            //log.debug("GETTING : ", parameters);
+
             that.consul.kv.get(parameters).then(response => {
 
-                // log.debug("CONSUL:RESPONSE : ", response);
+                //log.debug("CONSUL:RESPONSE : ", response);
 
                 that.observer.next({ key: response.Key, value: response.Value });
 

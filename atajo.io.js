@@ -27,8 +27,6 @@ class IO {
         this.consul.start().subscribe(
             response => {
 
-
-
                 that.identity = JSON.parse(response.value);
                 //log.debug("IO:IDENTITY UPDATE : ", that.identity);
 
@@ -40,13 +38,14 @@ class IO {
 
             },
             error => {
+
                 log.error("CONSUL UPDATE ERROR : ", error);
+
             },
             () => {}
         );
 
         this.consul.map(domain);
-
 
 
     }
