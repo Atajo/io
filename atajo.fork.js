@@ -45,13 +45,13 @@ class Fork {
 
                 global.dbi = models;
 
-                let api = false; // TODO : BIND API
+                this.api = false; // TODO : BIND API
 
                 //LEGACY HANDLER SHIM --> DEPRECATING
                 if (this.interface.init) {
                     log.warn("YOUR HANDLER IS OUT OF DATE AND IT'S IMPLEMENTATION IS MARKED FOR DEPRECATION. PLEASE SEE ES6 HANDLER STRUCTURE FOR FUTURE HANDLER DEVELOPMENT");
                 } else {
-                    this.lambda = new this.interface(api);
+                    this.lambda = new this.interface(this.api);
                 }
 
 
@@ -76,9 +76,6 @@ class Fork {
 
         log.debug("TRANSACTION IS ", data);
 
-
-
-
         data.request.resolve = (response) => {
             this.resolve(response, false);
         };
@@ -86,9 +83,6 @@ class Fork {
         data.request.reject = (error) => {
             this.resolve(error, true);
         };
-
-
-
 
         try {
 
@@ -99,7 +93,7 @@ class Fork {
                 });
                 this.lambda.req();
             } else {
-                this.lambda = new this.interface(api);
+                this.lambda = new this.interface(this.api);
                 this.lambda.request(data.request);
             }
 
@@ -111,12 +105,11 @@ class Fork {
 
     resolve(response, error) {
 
-        if (!response.RESPONSE) {
+        if (!response.RESPONSE && response.MESSAGE) {
             response = response.MESSAGE
-        } else {
+        } else if (response.RESPONSE) {
             response = response.RESPONSE;
         }
-
 
         log.debug("GOT HANDLER RESULT (ERROR : " + error + ")", response);
         let pid = this.transaction.pid;
